@@ -11,12 +11,12 @@ class User < Sequel::Model(:user)
   one_to_many :repository
 
   def with_repositories
-    default_view = self.base_view
-    default_view[:repositories] = self.repository.map {|repo| repo.base_view}
+    default_view = base_view
+    default_view[:repositories] = repository.map { |repo| repo.base_view }
     default_view
   end
 
   def default_view
-    self.with_repositories
+    with_repositories
   end
 end

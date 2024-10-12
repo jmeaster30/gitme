@@ -5,6 +5,7 @@ Sequel.migration do
     create_table(:user) do
       primary_key :id
       String :name, null: false
+      String :password, null: false
       DateTime :created_at, null: false
 
       unique :name

@@ -11,12 +11,12 @@ class Repository < Sequel::Model(:repository)
   many_to_one :user
 
   def with_owner
-    default_view = self.base_view
-    default_view[:owner] = self.user
+    default_view = base_view
+    default_view[:owner] = user
     default_view
   end
 
   def default_view
-    self.with_owner
+    with_owner
   end
 end

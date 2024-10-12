@@ -4,8 +4,11 @@ GEM
     ast (2.4.2)
     base64 (0.2.0)
     bigdecimal (3.1.8)
+    dotenv (3.1.4)
     ffi (1.17.0)
     json (2.7.2)
+    jwt (2.9.3)
+      base64
     language_server-protocol (3.17.0.3)
     listen (3.9.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -13,6 +16,7 @@ GEM
     minitest (5.25.1)
     mustermann (3.0.3)
       ruby2_keywords (~> 0.0.1)
+    openssl (3.2.0)
     parallel (1.26.3)
     parser (3.3.5.0)
       ast (~> 2.4.1)
@@ -68,8 +72,11 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  dotenv
   json
+  jwt
   minitest
+  openssl
   rake
   rerun
   rubocop

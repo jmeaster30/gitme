@@ -1,6 +1,9 @@
 source 'https://rubygems.org'
 
+gem 'dotenv'
 gem 'json'
+gem 'jwt'
+gem 'openssl'
 gem 'rake'
 gem 'sequel'
 gem 'sinatra'
