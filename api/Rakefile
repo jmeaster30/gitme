@@ -1,0 +1,35 @@
+require 'rubocop/rake_task'
+
+task default: %w[lint:autocorrect test]
+
+task fix: %w[lint:autocorrect]
+
+RuboCop::RakeTask.new(:lint) do |task|
+  task.patterns = [
+    'lib/**/*.rb', 
+    'test/**/*.rb'
+  ]
+  task.fail_on_error = false
+end
+
+task :run do
+  ruby 'lib/gitme_api.rb'
+end
+
+task :rerun do
+  sh "rerun --dir lib -- ruby 'lib/gitme_api.rb'"
+end
+
+task :test do
+  ruby 'test/example_test.rb'
+end
+
+task :migrate, [:version] do |t, args|
+  require "sequel/core"
+  require "logger"
+  Sequel.extension :migration
+  version = args[:version].to_i if args[:version]
+  Sequel.connect('sqlite://gitme.db', logger: Logger.new($stdout)) do |db|
+    Sequel::Migrator.run(db, "migrations", target: version)
+  end
+end
