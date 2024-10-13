@@ -10,13 +10,12 @@ class Repository < Sequel::Model(:repository)
 
   many_to_one :user
 
-  def with_owner
-    default_view = base_view
-    default_view[:owner] = user
-    default_view
+  def with_owner(base)
+    base[:owner] = user.view(:without_password)
+    base
   end
 
   def default_view
-    with_owner
+    view(:with_owner)
   end
 end

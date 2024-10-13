@@ -1,13 +1,20 @@
 source 'https://rubygems.org'
 
+gem 'bcrypt'
 gem 'dotenv'
+gem 'fileutils'
 gem 'json'
 gem 'jwt'
 gem 'openssl'
+gem 'puma'
 gem 'rake'
+gem 'rackup'
+gem 'securerandom'
 gem 'sequel'
 gem 'sinatra'
+gem 'sinatra-contrib'
 gem 'singleton'
+gem 'sqlite3'
 
 group :development, :test do
   gem 'minitest'

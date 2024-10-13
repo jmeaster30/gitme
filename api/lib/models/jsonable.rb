@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module JSONable
-  def base_view
+  def with_base
     hash = {}
     values.each do |key, value|
       hash[key] = value
@@ -10,10 +10,18 @@ module JSONable
   end
 
   def default_view
-    base_view
+    view(:with_base)
+  end
+
+  def view(*views)
+    base = with_base
+    views.each do |v|
+      base = send(v, base)
+    end
+    base
   end
 
   def to_json(*_args)
-    default_view.to_json
+    default_view.to_json(*_args)
   end
 end

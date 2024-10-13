@@ -14,6 +14,7 @@ Sequel.migration do
     create_table(:repository) do
       primary_key :id
       String :name, null: false
+      String :path, null: false
       DateTime :created_at, null: false
 
       foreign_key :user_id, :user

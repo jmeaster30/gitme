@@ -10,13 +10,17 @@ class User < Sequel::Model(:user)
 
   one_to_many :repository
 
-  def with_repositories
-    default_view = base_view
-    default_view[:repositories] = repository.map { |repo| repo.base_view }
-    default_view
+  def without_password(base)
+    base.delete(:password)
+    base
+  end
+
+  def with_repositories(base)
+    base[:repositories] = repository.map { |repo| repo.with_base }
+    base
   end
 
   def default_view
-    with_repositories
+    view(:without_password, :with_repositories)
   end
 end

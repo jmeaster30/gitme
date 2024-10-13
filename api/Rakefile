@@ -17,7 +17,7 @@ task :run do
 end
 
 task :rerun do
-  sh "rerun --dir lib -- ruby 'lib/gitme_api.rb'"
+  sh "rerun --pattern '{.env,lib/**/*.rb}' --background -- ruby 'lib/gitme_api.rb'"
 end
 
 task :test do
