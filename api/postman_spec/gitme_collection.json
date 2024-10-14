@@ -1,0 +1,206 @@
+{
+	"info": {
+		"_postman_id": "717dd060-3e60-452c-8c2d-ae15736272f6",
+		"name": "GitMe API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38970826"
+	},
+	"item": [
+		{
+			"name": "Get Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"me\",\n    \"password\": \"password\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{DOMAIN}}/api/token",
+					"protocol": "http",
+					"host": [
+						"{{DOMAIN}}"
+					],
+					"path": [
+						"api",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User Repos",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{ACCESS_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{DOMAIN}}/api/repo/me",
+					"protocol": "http",
+					"host": [
+						"{{DOMAIN}}"
+					],
+					"path": [
+						"api",
+						"repo",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Repo",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{ACCESS_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{DOMAIN}}/api/repo/me/vore",
+					"protocol": "http",
+					"host": [
+						"{{DOMAIN}}"
+					],
+					"path": [
+						"api",
+						"repo",
+						"me",
+						"vore"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create or Update Repo",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{ACCESS_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"supervore\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{DOMAIN}}/api/repo/me",
+					"protocol": "http",
+					"host": [
+						"{{DOMAIN}}"
+					],
+					"path": [
+						"api",
+						"repo",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{ACCESS_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"lilith\",\n    \"password\": \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{DOMAIN}}/api/user",
+					"protocol": "http",
+					"host": [
+						"{{DOMAIN}}"
+					],
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{ACCESS_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"name\": \"megagirl\",\n    \"password\": \"fuckedup\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{DOMAIN}}/api/user",
+					"protocol": "http",
+					"host": [
+						"{{DOMAIN}}"
+					],
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
