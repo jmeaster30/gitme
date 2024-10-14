@@ -5,6 +5,7 @@ require 'sequel'
 
 require_relative 'jsonable'
 
+# Model for the 'user' table in sqlite
 class User < Sequel::Model(:user)
   include JSONable
 
@@ -16,7 +17,7 @@ class User < Sequel::Model(:user)
   end
 
   def with_repositories(base)
-    base[:repositories] = repository.map { |repo| repo.with_base }
+    base[:repositories] = repository.map(&:with_base)
     base
   end
 

@@ -1,29 +1,23 @@
 # frozen_string_literal: true
 
-module ErrorHelpers
-  attr_accessor :statuscode, :message
-end
-
+# general http errors allows for tracking the status code along with a message to be returned to the user
 class HttpError < StandardError
-  include ErrorHelpers
-
   def initialize(statuscode, message)
-    self.statuscode = statuscode
-    self.message = message
+    @statuscode = statuscode
+    @message = message
+    super "[#{@statuscode}] #{@message}"
   end
 end
 
+# HTTP status code 422 error
 class ValidationError < HttpError
-  include ErrorHelpers
-
   def initialize(message)
     super(422, message)
   end
 end
 
+# HTTP status code 404 error
 class NotFoundError < HttpError
-  include ErrorHelpers
-
   def initialize(message)
     super(404, message)
   end

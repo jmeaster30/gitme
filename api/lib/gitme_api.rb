@@ -1,36 +1,33 @@
 # frozen_string_literal: true
 
-require 'dotenv/load'
 require 'json'
 require 'openssl'
 require 'sequel'
 require 'sinatra'
-require 'sinatra/cookies'
+require_relative 'config'
+require_relative 'errors'
 
-Database = Sequel.connect('sqlite://gitme.db')
+Database = Sequel.connect("sqlite://#{Config.instance[:db_path]}")
 
 require_relative 'controllers/repositories'
 require_relative 'controllers/auth'
-require_relative 'errors'
 require_relative 'helpers'
 
-def read_key(key_sym, env_var)
-  path = File.expand_path ENV[env_var]
+def read_key(key_sym, key_path)
+  path = File.expand_path key_path
   key = OpenSSL::PKey::RSA.new File.read path
   set key_sym, key
 end
 
-read_key :signing_key, 'GITME_SIGNING_KEY'
-read_key :verify_key,  'GITME_VERIFY_KEY'
+read_key :signing_key, Config.instance[:jwt_signing]
+read_key :verify_key,  Config.instance[:jwt_verify]
 
 enable :sessions
-set :session_secret, ENV['GITME_SESSION_SECRET']
+set :session_secret, Config.instance[:session_secret]
 set :show_exceptions, false
 
 before do
-  puts 'oooo'
-  if request.body.size > 0
-    puts 'body has stuff'
+  unless request.body.empty?
     request.body.rewind
     @request_payload = JSON.parse(request.body.read, symbolize_names: true)
   end
@@ -42,8 +39,7 @@ post '/api/token' do
   found_user = Auth.instance.get_user_by_creds(username, password)
   unauthorized! if found_user.nil?
 
-  expire_at = make_token found_user.id
-  json 'expire_at' => expire_at
+  json make_token found_user.id
 end
 
 get '/api/repo/:user' do |user|
@@ -67,14 +63,13 @@ get '/api/repo/:user/:repo_name' do |user, repo_name|
 end
 
 put '/api/user' do
-  puts @request_payload
   protected!
   json Auth.instance.create_user(@request_payload)
 end
 
 post '/api/user' do
   user = Auth.instance.get_user @request_payload[:id]
-  raise NotFoundError.new("User id #{@request_payload[:id]} doesn't exist") if user.nil?
+  raise NotFoundError, "User id #{@request_payload[:id]} doesn't exist" if user.nil?
 
   protected_same_user! user.name
   json Auth.instance.update_user(@request_payload)

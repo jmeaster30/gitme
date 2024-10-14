@@ -6,6 +6,7 @@ require 'singleton'
 
 require_relative '../models/user'
 
+# Handles all functionality around creating, editing, and authenticating users
 class Auth
   include Singleton
 
@@ -29,25 +30,25 @@ class Auth
   def create_user(body)
     user = User.new(created_at: DateTime.now)
     user.name = body[:name]
-    raise ValidationError.new('A password is required pls') if body[:password].nil?
+    raise ValidationError, 'A password is required pls' if body[:password].nil?
 
     user.password = BCrypt::Password.create(body[:password])
 
     user.save
     user
   rescue Sequel::UniqueConstraintViolation
-    raise ValidationError.new("Username '#{user.name}' already exists.")
+    raise ValidationError, "Username '#{user.name}' already exists."
   end
 
   def update_user(body)
     user = User[body[:id]]
-    raise NotFoundError.new("User id '#{body[:id]}' not found") if user.nil?
+    raise NotFoundError, "User id '#{body[:id]}' not found" if user.nil?
 
     user.name = body[:name]
     user.password = BCrypt::Password.create(body[:password]) unless body[:password].nil?
     user.save
     user
   rescue Sequel::UniqueConstraintViolation
-    raise ValidationError.new("Username '#{user.name}' already exists.")
+    raise ValidationError, "Username '#{user.name}' already exists."
   end
 end

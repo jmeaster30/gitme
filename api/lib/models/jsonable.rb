@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# Can be included for our database models so that they can be converted to hash tables and serialized into json
+# Also allows defining custom views to hide variables that aren't needed
 module JSONable
   def with_base
     hash = {}
@@ -21,7 +23,7 @@ module JSONable
     base
   end
 
-  def to_json(*_args)
-    default_view.to_json(*_args)
+  def to_json(*args)
+    default_view.to_json(*args)
   end
 end

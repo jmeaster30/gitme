@@ -5,6 +5,7 @@ require 'sequel'
 
 require_relative 'jsonable'
 
+# Model for the 'repository' table in sqlite
 class Repository < Sequel::Model(:repository)
   include JSONable
 
