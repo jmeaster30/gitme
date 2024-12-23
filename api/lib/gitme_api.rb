@@ -27,15 +27,25 @@ set :session_secret, Config.instance[:session_secret]
 set :show_exceptions, false
 
 before do
-  unless request.body.empty?
+  logger.info request.to_json
+  unless request.body.length == 0
     request.body.rewind
-    @request_payload = JSON.parse(request.body.read, symbolize_names: true)
+    request_content = request.body.read
+    # TODO: switch between content types
+    request_content = request_content.gsub('\"', '"').gsub('\n', '').gsub(' ', '')
+    puts request_content.inspect
+    @request_payload = JSON.parse(request_content, symbolize_names: true)
   end
 end
 
 post '/api/token' do
+  logger.info @request_payload.inspect
+  puts @request_payload[:username]
+  puts @request_payload[:password]
   username = @request_payload[:username]
   password = @request_payload[:password]
+  logger.info username
+  logger.info password
   found_user = Auth.instance.get_user_by_creds(username, password)
   unauthorized! if found_user.nil?
 
@@ -43,27 +53,27 @@ post '/api/token' do
 end
 
 get '/api/repo/:user' do |user|
-  protected!
+  check_authorized!
   json Repositories.instance.get_repos_by_user(user)
 end
 
 put '/api/repo/:user' do |user|
-  protected_same_user! user
+  check_authorized_same_user! user
   json Repositories.instance.create_repo(@user, @request_payload)
 end
 
 post '/api/repo/:user' do |user|
-  protected_same_user! user
+  check_authorized_same_user! user
   json Repositories.instance.update_repo(@user, @request_payload)
 end
 
 get '/api/repo/:user/:repo_name' do |user, repo_name|
-  protected!
+  check_authorized!
   json Repositories.instance.get_repo_by_user_name(user, repo_name)
 end
 
 put '/api/user' do
-  protected!
+  check_authorized!
   json Auth.instance.create_user(@request_payload)
 end
 
@@ -71,7 +81,7 @@ post '/api/user' do
   user = Auth.instance.get_user @request_payload[:id]
   raise NotFoundError, "User id #{@request_payload[:id]} doesn't exist" if user.nil?
 
-  protected_same_user! user.name
+  check_authorized_same_user! user.name
   json Auth.instance.update_user(@request_payload)
 end
 
@@ -81,6 +91,7 @@ end
 # end
 
 not_found do
+  logger.info request.to_json
   not_found!
 end
 
